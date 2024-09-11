@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - report.info - src/s21_inverse_matrix.c</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - s21_inverse_matrix.c<span style="font-size: 80%;"> (source / <a href="s21_inverse_matrix.c.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">report.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">32</td>
+            <td class="headerCovTableEntry">32</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2024-09-11 11:53:18</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">4</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : #include &quot;s21_matrix.h&quot;</span>
+<span id="L2"><span class="lineNum">       2</span>              : </span>
+<span id="L3"><span class="lineNum">       3</span> <span class="tlaGNC tlaBgGNC">          10 : int s21_inverse_check(matrix_t *A, matrix_t *result) {</span></span>
+<span id="L4"><span class="lineNum">       4</span> <span class="tlaGNC">          10 :   int error_code = OK;</span></span>
+<span id="L5"><span class="lineNum">       5</span> <span class="tlaGNC">          10 :   if (A == NULL || result == NULL || A-&gt;rows &lt;= 0 || A-&gt;columns &lt;= 0 ||</span></span>
+<span id="L6"><span class="lineNum">       6</span> <span class="tlaGNC">           9 :       A-&gt;matrix == NULL) {</span></span>
+<span id="L7"><span class="lineNum">       7</span> <span class="tlaGNC">           1 :     error_code = INCORRECT_MATRIX;</span></span>
+<span id="L8"><span class="lineNum">       8</span>              :   }</span>
+<span id="L9"><span class="lineNum">       9</span> <span class="tlaGNC">          10 :   if (A-&gt;rows != A-&gt;columns) {</span></span>
+<span id="L10"><span class="lineNum">      10</span> <span class="tlaGNC">           1 :     error_code = CALC_ERROR;</span></span>
+<span id="L11"><span class="lineNum">      11</span>              :   }</span>
+<span id="L12"><span class="lineNum">      12</span> <span class="tlaGNC">          10 :   return error_code;</span></span>
+<span id="L13"><span class="lineNum">      13</span>              : }</span>
+<span id="L14"><span class="lineNum">      14</span>              : </span>
+<span id="L15"><span class="lineNum">      15</span> <span class="tlaGNC">           8 : int s21_check_determinant(matrix_t *A, double *det) {</span></span>
+<span id="L16"><span class="lineNum">      16</span> <span class="tlaGNC">           8 :   int error_code = s21_determinant(A, det);</span></span>
+<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">           8 :   return (error_code == OK &amp;&amp; *det != 0) ? OK : CALC_ERROR;</span></span>
+<span id="L18"><span class="lineNum">      18</span>              : }</span>
+<span id="L19"><span class="lineNum">      19</span>              : </span>
+<span id="L20"><span class="lineNum">      20</span> <span class="tlaGNC">           7 : int s21_create_inverse(matrix_t *A, matrix_t *result, double det) {</span></span>
+<span id="L21"><span class="lineNum">      21</span>              :   matrix_t complements;</span>
+<span id="L22"><span class="lineNum">      22</span> <span class="tlaGNC">           7 :   int error_code = OK;</span></span>
+<span id="L23"><span class="lineNum">      23</span>              : </span>
+<span id="L24"><span class="lineNum">      24</span> <span class="tlaGNC">           7 :   error_code = s21_calc_complements(A, &amp;complements);</span></span>
+<span id="L25"><span class="lineNum">      25</span> <span class="tlaGNC">           7 :   if (error_code == OK) {</span></span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC">           7 :     error_code = s21_create_matrix(A-&gt;rows, A-&gt;columns, result);</span></span>
+<span id="L27"><span class="lineNum">      27</span> <span class="tlaGNC">           7 :     if (error_code == OK) {</span></span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">          22 :       for (int i = 0; i &lt; complements.rows; i++) {</span></span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">          48 :         for (int j = 0; j &lt; complements.columns; j++) {</span></span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">          33 :           result-&gt;matrix[i][j] = complements.matrix[j][i] / det;</span></span>
+<span id="L31"><span class="lineNum">      31</span>              :         }</span>
+<span id="L32"><span class="lineNum">      32</span>              :       }</span>
+<span id="L33"><span class="lineNum">      33</span>              :     }</span>
+<span id="L34"><span class="lineNum">      34</span>              : </span>
+<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">           7 :     s21_remove_matrix(&amp;complements);</span></span>
+<span id="L36"><span class="lineNum">      36</span>              :   }</span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">           7 :   return error_code;</span></span>
+<span id="L38"><span class="lineNum">      38</span>              : }</span>
+<span id="L39"><span class="lineNum">      39</span>              : </span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">          10 : int s21_inverse_matrix(matrix_t *A, matrix_t *result) {</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">          10 :   int error_code = OK;</span></span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">          10 :   double det = 0.0;</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">          10 :   error_code = s21_inverse_check(A, result);</span></span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">          10 :   if (error_code == OK) {</span></span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           8 :     error_code = s21_check_determinant(A, &amp;det);</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           8 :     if (error_code == OK) {</span></span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">           7 :       error_code = s21_create_inverse(A, result, det);</span></span>
+<span id="L48"><span class="lineNum">      48</span>              :     } else {</span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           1 :       error_code = CALC_ERROR;</span></span>
+<span id="L50"><span class="lineNum">      50</span>              :     }</span>
+<span id="L51"><span class="lineNum">      51</span>              :   }</span>
+<span id="L52"><span class="lineNum">      52</span>              : </span>
+<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">          10 :   return error_code;</span></span>
+<span id="L54"><span class="lineNum">      54</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
